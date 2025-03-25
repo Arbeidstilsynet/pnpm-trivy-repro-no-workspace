@@ -19,6 +19,9 @@ COPY .npmrc package.json pnpm-lock.yaml ./
 
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
+RUN mkdir -p /app/package-files && \
+    find node_modules -name "package.json" -exec cp --parents {} /app/package-files \;
+
 
 # Rebuild the source code only when needed
 FROM base AS builder
@@ -48,8 +51,11 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 # OPTIONAL?: bring along node_modules for SBOM vulnerability detection
 # COPY --from=deps --chown=nextjs:nodejs /app/node_modules ./node_modules
 
+# Copy only the package.json files with their directory structure, for SBOM vulnerability detection
+COPY --from=deps --chown=nextjs:nodejs /app/package-files/node_modules/* ./node_modules
+
 # OPTIONAL?: include lockfile in runner for SBOM vulnerability detection
-COPY pnpm-lock.yaml /app
+# COPY pnpm-lock.yaml /app
 
 USER nextjs
 
