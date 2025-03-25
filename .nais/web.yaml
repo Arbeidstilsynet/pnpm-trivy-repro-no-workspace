@@ -1,0 +1,21 @@
+apiVersion: nais.io/v1alpha1
+kind: Application
+metadata:
+  name: pnpm-trivy-repro-no-workspace
+  namespace: plattform
+spec:
+  ingresses:
+    - https://pnpm-trivy-repro-no-workspace.dev.atil.cloud.nais.io
+  accessPolicy:
+    outbound:
+      external:
+        - host: "swapi.dev"
+  image: "{{image}}"
+  port: 3000
+  replicas:
+    max: 1
+    min: 1
+  resources:
+    requests:
+      cpu: 10m
+      memory: 128Mi

@@ -1,0 +1,29 @@
+name: Build and deploy
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+jobs:
+  build_and_deploy_web:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: nais/docker-build-push@v0
+        id: docker-build-push-web
+        with:
+          team: plattform
+      - uses: nais/deploy/actions/deploy@v2
+        env:
+          CLUSTER: dev
+          RESOURCE: .nais/web.yaml
+          VAR: image=${{ steps.docker-build-push-web.outputs.image }}
+          TELEMETRY: ${{ steps.docker-build-push-web.outputs.telemetry }}

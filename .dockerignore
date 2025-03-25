@@ -1,0 +1,9 @@
+.git
+**/Dockerfile
+**/.dockerignore
+**/compose.yaml
+**/node_modules
+**/*.log
+**/*.md
+**/.next
+**/.env*
