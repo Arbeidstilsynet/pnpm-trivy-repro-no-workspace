@@ -46,10 +46,10 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 # OPTIONAL?: bring along node_modules for SBOM vulnerability detection
-COPY --from=deps --chown=nextjs:nodejs /app/node_modules ./node_modules
+# COPY --from=deps --chown=nextjs:nodejs /app/node_modules ./node_modules
 
 # OPTIONAL?: include lockfile in runner for SBOM vulnerability detection
-# COPY pnpm-lock.yaml /app
+COPY pnpm-lock.yaml /app
 
 USER nextjs
 
