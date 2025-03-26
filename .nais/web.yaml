@@ -4,6 +4,7 @@ metadata:
   name: pnpm-trivy-repro-no-workspace
   namespace: plattform
 spec:
+  ttl: 1h
   ingresses:
     - https://pnpm-trivy-repro-no-workspace.dev.atil.cloud.nais.io
   accessPolicy:
